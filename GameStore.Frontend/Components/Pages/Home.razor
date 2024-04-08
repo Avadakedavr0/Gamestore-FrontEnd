@@ -1,8 +1,14 @@
 ﻿@page "/"
 @using Models
+@using Clients
 
 <PageTitle>Game Catalog</PageTitle>
 
+@if (games is null)
+{
+    <p><em>Loading..</em></p>
+}
+else {
 <table class="table table-striped table-bordered table-hover mt-3">
     <thead class="table-dark">
         <th>Id</th>
@@ -27,30 +33,14 @@
         }
     </tbody>
 </table>
+}
 
 @code {
-    private GameSummary[] games = 
-    [
-        new() {
-            Id = 1,
-            Name = " Fighter",
-            Genre = "Fig",
-            Price = 19.99M,
-            ReleaseDate = new DateOnly(1992, 7, 15)
-        }, 
-                new() {
-            Id = 2,
-            Name = "Street",
-            Genre = "Figh",
-            Price = 10.99M,
-            ReleaseDate = new DateOnly(1994, 9, 17)
-        }, 
-                new() {
-            Id = 3,
-            Name = "Pac Man",
-            Genre = "Arcade",
-            Price = 15.99M,
-            ReleaseDate = new DateOnly(1997, 12, 18)
-        } 
-    ];
+    private GamesClient client = new();
+    private GameSummary[]? games;
+
+    protected override void OnInitialized()
+    {
+        games = client.GetGames();
+    }
 }
